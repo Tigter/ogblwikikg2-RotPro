@@ -155,6 +155,11 @@ def set_logger(args):
     else:
         log_file = os.path.join(args.save_path or args.init_checkpoint, 'test.log')
 
+    root = logging.getLogger('')
+    if root.handlers:
+        for handler in root.handlers:
+            root.removeHandler(handler)
+
     logging.basicConfig(
         format='%(asctime)s %(levelname)-8s %(message)s',
         level=logging.INFO,
@@ -168,6 +173,9 @@ def set_logger(args):
     formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s')
     console.setFormatter(formatter)
     logging.getLogger('').addHandler(console)
+
+    logging.getLogger('').setLevel(logging.INFO)
+    logging.info("Setting Logger over")
 
 def log_metrics(mode, step, metrics, writer):
     '''
